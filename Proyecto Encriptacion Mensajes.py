@@ -5,6 +5,7 @@ Matemática Discreta
 Proyecto Criptografía
 Pablo Sebastián Herrera & Sofia Lam Méndez
 """
+import math
 def is_prime(n):
     for i in range (2,n):
         if n%i == 0:
@@ -106,52 +107,76 @@ def CreateBlocks(Message_List,n):
     
     return bloques
             
-        
+def mpower(base,exponente,modulo):
+    #base es el bloque, exponente es e y el modulo es n
+    #lo que se debe hacer es calcular, que numero representa a b^n en el modulo
+    if(exponente == 0):
+        return 1
+    else:
+      result = ((base%modulo)*mpower(base,exponente-1,modulo))%modulo
+      return result
+  
+def EncryptMessage(lista_bloques,e,n):
+    EncryptedMessage = []
+    for bloque in lista_bloques:
+        bloque_int = int(bloque)
+        c = mpower(bloque_int, e, n)
+        EncryptedMessage.append(c)
+    return EncryptedMessage
     
+def ShowEncryptedMessage(CryptedMessageList):
+    mensaje=""
+    for element in CryptedMessageList:
+        mensaje = mensaje + str(element)
+    return mensaje
+ 
+def EncriptarMensaje():
+    entry = input("Ingrese el mensaje que se encriptara\n")
+    Codificacion = ["*","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",0,1,2,3,4,5,6,7,8,9]
 
-import math
-print("Bienvenido al programa de encriptación de mensaje")
-#-----------------------------------------------------------------------------
-#Ingresar mensaje y obtener numeros que lo codifiquen
-#El mensaje codificado elimina espacios, solo se queda con lo que se encuentra en el abecedario
-entry = input("Ingrese el mensaje que se encriptara\n")
-Codificacion = ["*","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",0,1,2,3,4,5,6,7,8,9]
-
-Entry = entry.upper()
-Mensaje = list(Entry)
-
-Coded_message_list = []
-
-for caracter in Mensaje:
-    if caracter in Codificacion:
-        Coded_message_list.append(Codificacion.index(caracter))
-#------------------------------------------------------------------------------
-#Encriptacion del mensaje codificado
-#-----------------------------------------------------------------------------
-#primer paso: El usuario escoge los primos que lo ayudaran a encriptar su mensaje
-print("La encriptacion es de llave publica, por favor siga las instrucciones a continuacion")
-p = ChoosePrime()
-print("Ha escogido un primo exitosamente, por favor siga las siguientes instrucciones")
-q = ChoosePrime()
-
-while IdenticalPrimes(p, q) == True:
+    Entry = entry.upper()
+    Mensaje = list(Entry)
+    Coded_message_list = []
+    for caracter in Mensaje:
+        if caracter in Codificacion:
+            Coded_message_list.append(Codificacion.index(caracter))
+    print("La encriptacion es de llave publica, por favor siga las instrucciones a continuacion")
+    p = ChoosePrime()
+    print("Ha escogido un primo exitosamente, por favor siga las siguientes instrucciones")
     q = ChoosePrime()
+    while IdenticalPrimes(p, q) == True:
+        q = ChoosePrime()
+    print("Valor de P:",p)
+    print("Valor de Q:",q)
+    n = p*q
+    phi = CalculatePhi(p, q)
+    e = ChooseE(phi)
+    Message_List = AddZeros(Coded_message_list)
+    Blocks = CreateBlocks(Message_List, n)
+    #se procede a Encriptar el mensaje colocado
+    CryptedMessageList = EncryptMessage(Blocks, e, n)
+    CryptedMessage = ShowEncryptedMessage(CryptedMessageList)
+    print("Su mensaje Encriptado es:")
+    print(CryptedMessage)
     
-print("Valor de P:",p)
-print("Valor de Q:",q)
-
-
-#----------------------------------------------------------------------------------
-#Se ecoge e, para generar la llave publica y privada
-n = p*q
-phi = CalculatePhi(p, q)
-e = ChooseE(phi)
-d = CalculateD(e, phi)
-
-#(n,e) es la llave publica
-#(d) es la llave privada
-
-#-----------------------------------------------------------------------------------
-#se concatena el mensaje, anteponiendo ceros en los numeros de un digito
-Message_List = AddZeros(Coded_message_list)
-Blocks = CreateBlocks(Message_List, n)
+def DesencriptarMensaje():
+    print("Ingrese el mensaje que desea desencriptar")
+    #hacer funcion para desencriptar mensajes utilizando los bloques
+    
+#-----------------------------------------------------------------------------
+#                                  MENU DEL PROGRAMA
+print("Bienvenido al programa de mensajes encriptados, por favor, escoja una opcion")
+print("1.Encriptar un mensaje")
+print("2.Desencriptar un mensaje")
+option = input()
+try:
+    option = int(option)
+    while option <= 0 or option >2:
+        option = int(input("Escoja una opcion dentro del menu\n"))
+        
+    if option == 1:
+        EncriptarMensaje()
+    if option == 2:
+        DesencriptarMensaje()
+except Exception:
+    print("Debe ingresar un dato valido y dento del menu, corra de nuevo el programa e intente de nuevo")
