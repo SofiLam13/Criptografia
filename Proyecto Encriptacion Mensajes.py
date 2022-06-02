@@ -79,6 +79,7 @@ def euclide_ext_alg(a, b):
         return table[-2]['t'], table[-2]['s']
     return table[-2]['s'], table[-2]['t']
 
+#Para la llave privada
 def CalculateD(e,phi):
     d_tuple = euclide_ext_alg(e, phi)
     if d_tuple[0] < 0:
@@ -156,11 +157,38 @@ def EncriptarMensaje():
     #se procede a Encriptar el mensaje colocado
     CryptedMessageList = EncryptMessage(Blocks, e, n)
     CryptedMessage = ShowEncryptedMessage(CryptedMessageList)
+    print("El valor de phi es: ", phi)
+    print("Su llave pública es (", n,",", e, ")")
     print("Su mensaje Encriptado es:")
     print(CryptedMessage)
-    
+
+#AYUDA NO SE PORQUE NO LEE ESTA BABOSADA
+def Desencriptando(MensajeEncriptado, D, n):
+    Message=[]
+    Encriptado=[]
+    Encriptado.append(MensajeEncriptado.split())
+    Codificacion = ["*","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",0,1,2,3,4,5,6,7,8,9]
+    for element in Encriptado:
+        m= mpower(element, D, n)
+        i= Codificacion[m]
+        Message.append(i)
+    return Message
+
+def leyendomensaje(m):
+    mensaje=""
+    for element in m:
+        mensaje = mensaje + str(element)
+    return mensaje
+
 def DesencriptarMensaje():
-    print("Ingrese el mensaje que desea desencriptar")
+    codificado=input("Ingrese el mensaje que desea desencriptar separando cada bloque con un espacio: ")
+    phi=int(input("Por favor ingrese el número phi: "))
+    n= int(input("Por favor ingrese el primer número de la llave pública: "))
+    e=int(input("Por favor ingrese el segundo número de la llave pública: "))
+    d=CalculateD(e, phi)
+    
+    print("El mensaje encriptado dice:")
+    print(Desencriptando(codificado, d, n))
     #hacer funcion para desencriptar mensajes utilizando los bloques
     
 #-----------------------------------------------------------------------------
