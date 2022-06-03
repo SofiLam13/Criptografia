@@ -5,6 +5,9 @@ Matemática Discreta
 Proyecto Criptografía
 Pablo Sebastián Herrera & Sofia Lam Méndez
 """
+import sys
+from Crypto.PublicKey import RSA
+import ast
 import math
 def is_prime(n):
     for i in range (2,n):
@@ -182,13 +185,16 @@ def leyendomensaje(m):
 
 def DesencriptarMensaje():
     codificado=input("Ingrese el mensaje que desea desencriptar separando cada bloque con un espacio: ")
-    phi=int(input("Por favor ingrese el número phi: "))
-    n= int(input("Por favor ingrese el primer número de la llave pública: "))
-    e=int(input("Por favor ingrese el segundo número de la llave pública: "))
-    d=CalculateD(e, phi)
-    
+    #phi=int(input("Por favor ingrese el número phi: "))
+    #n= int(input("Por favor ingrese el primer número de la llave pública: "))
+    #e=int(input("Por favor ingrese el segundo número de la llave pública: "))
+    #d=CalculateD(e, phi)
+    keyPair = RSA.generate(1024)
+    pubKey = keyPair.publickey()
+    decryptedMsg = keyPair.decrypt(ast.literal_eval(str(codificado)))
     print("El mensaje encriptado dice:")
-    print(Desencriptando(codificado, d, n))
+    print(decryptedMsg)
+    #print(Desencriptando(codificado, d, n))
     #hacer funcion para desencriptar mensajes utilizando los bloques
     
 #-----------------------------------------------------------------------------
