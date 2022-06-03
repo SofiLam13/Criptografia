@@ -159,24 +159,12 @@ def EncriptarMensaje():
     print("Su mensaje Encriptado es:")
     print(CryptedMessage)
     
-def DesencriptarMensaje():
-    print("Ingrese el mensaje que desea desencriptar")
-    #hacer funcion para desencriptar mensajes utilizando los bloques
+
+    
+#def DesencriptarMensaje():
+    
     
 #-----------------------------------------------------------------------------
-#                                  MENU DEL PROGRAMA
-print("Bienvenido al programa de mensajes encriptados, por favor, escoja una opcion")
-print("1.Encriptar un mensaje")
-print("2.Desencriptar un mensaje")
-option = input()
-try:
-    option = int(option)
-    while option <= 0 or option >2:
-        option = int(input("Escoja una opcion dentro del menu\n"))
-        
-    if option == 1:
-        EncriptarMensaje()
-    if option == 2:
-        DesencriptarMensaje()
-except Exception:
-    print("Debe ingresar un dato valido y dento del menu, corra de nuevo el programa e intente de nuevo")
+#                              MENU DEL PROGRAMA
+print("Bienvenido al programa de ENCRIPTACION DE MENSAJES")
+EncriptarMensaje()
