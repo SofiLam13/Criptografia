@@ -5,7 +5,9 @@ Matemática Discreta
 Proyecto Criptografía
 Pablo Sebastián Herrera & Sofia Lam Méndez
 """
+#este codigo solamente se encarga de encriptar haciendo uso del RSA
 import math
+
 def is_prime(n):
     for i in range (2,n):
         if n%i == 0:
@@ -159,12 +161,84 @@ def EncriptarMensaje():
     print("Su mensaje Encriptado es:")
     print(CryptedMessage)
     
+def BlockSize(n):
+    a = 25
+    N = 0
+    
+    while a < n:
+        N = N +1 
+        tempo = str(a)
+        tempo2 = tempo+"25"
+        a = int(tempo2)
+    
+    return N
 
+def CifrarToNumeros(CifradoMensaje, d, n):
+    m = (int(CifradoMensaje)**d)%n
+    return m
+
+def NumerosToLetras(Numletra):
+    dic = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    aux = 0
     
-#def DesencriptarMensaje():
+    for i in dic:
+        if Numletra == aux:
+            return i
+        else:
+            aux = aux + 1
+            
+def split(s, n):
+    if len(s) < n:
+        return []
+    else:
+        return [s[:n]] + split(s[n:], n)
+            
+def DesencriptarMensaje():
+    print("Ingrese mensaje encriptado")
+    mensaje = input()  
+    print("Ingrese el valor de e")
+    e = int(input())
+    print("Ingrese el valor de n")
+    n = int(input())
+    phi = int(input("Ingrese el valor de phi\n"))
+    d = CalculateD(e, phi)
     
-    
+    lista1 = mensaje.split(" ")
+    chain1 = "".join(lista1)
+    N = BlockSize(n)    
+    lista2 = split(chain1,2*N)
+    lista3 = []
+    for i in lista2:
+        aux = CifrarToNumeros(i,d,n)
+        lista3.append(aux)
+    lista4 = []
+    for i in lista3:
+        aux2 = (str(i).rjust(2*N,'0'))
+        lista4.append(str(aux2))
+    chain2 = "".join(lista4)
+    lista5 = split(chain2, 2)
+    lista6 = []
+    for i in lista5:
+        n = NumerosToLetras(int(i))
+        lista6.append(str(n))
+    chain3 = "".join(lista6)    
+    print("Su mensaje desencriptado es:")
+    print(chain3)
+
 #-----------------------------------------------------------------------------
 #                              MENU DEL PROGRAMA
-print("Bienvenido al programa de ENCRIPTACION DE MENSAJES")
-EncriptarMensaje()
+print("Bienvenido al programa de mensajes encriptados, por favor, escoja una opcion")
+print("1.Encriptar un mensaje")
+print("2.Desencriptar un mensaje")
+option = input()
+try:
+    option = int(option)
+    while option <= 0 or option >2:
+        option = int(input("Escoja una opcion dentro del menu\n"))
+        
+    if option == 1:
+        EncriptarMensaje()
+    if option == 2:
+        DesencriptarMensaje()
+except Exception:
+    print("Debe ingresar un dato valido y dento del menu, corra de nuevo el programa e intente de nuevo")
